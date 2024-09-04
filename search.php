@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db = 'Shop';
+$db = 'shop';
 $user = 'postgres';
 $pass = 'admin';
 
