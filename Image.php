@@ -1,7 +1,7 @@
 <?php
 // Подключение к базе данных
 $host = 'localhost';
-$db = 'Shop';
+$db = 'shop';
 $user = 'postgres';
 $pass = 'admin';
 
@@ -16,8 +16,8 @@ $options = [
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+} catch (PDOException $e) {
+    throw new PDOException($e->getMessage(), (int)$e->getCode());
 }
 
 // Проверяем, передан ли параметр 'name' в URL
@@ -47,11 +47,12 @@ if (isset($_GET['name'])) {
     }
 }
 function getTwoNames($conn) {
-    $stmt1 = $conn->prepare("SELECT name FROM pc_components"); // Измените на вашу таблицу
+    $stmt1 = $conn->prepare("SELECT name, description FROM pc_components"); // Измените на вашу таблицу
     $stmt1->execute();
     return $stmt1->fetchAll(PDO::FETCH_ASSOC); // Возвращаем все найденные имена
 }
 $names= getTwoNames($pdo);
+
 ?>
 
 <!DOCTYPE html>
@@ -63,28 +64,31 @@ $names= getTwoNames($pdo);
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-center">Поиск комплектующих для ПК</h1>
+<div class="container mt-5 mb-4">
+    <h1 class="text-center">Поиск</h1>
     <form action="search.php" method="GET" class="form-inline justify-content-center">
-        <input type="text" name="search" class="form-control mr-2" placeholder="Введите название комплектующего" required>
+        <label>
+            <input type="text" name="search" class="form-control mr-2" placeholder="Введите название комплектующего" required>
+        </label>
         <button type="submit" class="btn btn-primary">Поиск</button>
     </form>
 </div>
-<div class="card" style="width: 18rem;">
-    <img src="Image.php?name=RTX_3080" class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title"><?php echo htmlspecialchars($names[0]['name']) ?> </h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+<div class="container">
+    <?php foreach ($names as $record): ?>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <img src="Image.php?name=RTX_3080" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo htmlspecialchars($record['name']); ?> </h5>
+                    <p class="card-text"><?php echo htmlspecialchars($record['description']); ?></p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<div class="card" style="width: 18rem;">
-    <img src="Image.php?name=Corsair_Vengeance_LPX_16GB" class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title"><?php echo htmlspecialchars($names[2]['name']) ?></h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
+    <?php endforeach; ?>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
