@@ -1,51 +1,52 @@
 <?php
-$host = 'localhost';
-$db = 'shop'; // Замените на имя вашей базы данных
-$user = 'postgres';     // Замените на ваше имя пользователя
-$pass = 'admin';     // Замените на ваш пароль
+$host = "localhost"; // Ваш хост
+$port = "5432"; // Порт по умолчанию для PostgreSQL
+$dbname = "Shop"; // Имя вашей базы данных
+$user = "postgres"; // Ваше имя пользователя
+$password = "admin"; // Ваш пароль
 
-$conn = new PDO("pgsql:host=$host;dbname=$db", $user, $pass);
-
-// Запрос к базе данных
-$stmt = $conn->prepare("SELECT image FROM pc_components");
-$stmt->execute();
-
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-foreach ($results as $result) {
-   $s = $result['image'];
+try {
+    $conn = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Ошибка подключения: " . $e->getMessage();
+    exit;
 }
+
+// Функция для извлечения двух имен из базы данных
+function getTwoNames($conn) {
+    $stmt = $conn->prepare("SELECT name FROM pc_components"); // Измените на вашу таблицу
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Возвращаем все найденные имена
+}
+
+// Извлечение имен из базы данных
+$names = getTwoNames($conn);
+
+$conn = null; // Закрываем соединение с базой данных
 ?>
-<!--<!DOCTYPE html>-->
-<!--<html lang="ru">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Вывод изображения</title>-->
-<!--</head>-->
-<!--<body>-->
-<?php //if ($s): ?>
-<!--    <img src="--><?php //= htmlspecialchars($s) ?><!--" alt="Изображение">-->
-<?php //else: ?>
-<!--    <p>Изображение не найдено.</p>-->
-<?php //endif; ?>
-<!--</body>-->
-<!--</html>-->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Имена из БД</title>
+</head>
 <body>
-<div class="card" style="width: 20rem;">
-    <?php if ($s): ?>
-<img src="<?= htmlspecialchars($s) ?>" class="card-img-top" alt="Картинка" width="75" height="150">
-    <?php endif; ?>
-<div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+
+<!-- Первый HTML-код для первого имени -->
+<div>
+    <h1>Первое имя:</h1>
+
+    <p><?php echo htmlspecialchars($names[0]['name']); ?></p>
 </div>
+
+<!-- Второй HTML-код для второго имени -->
+<div>
+    <h1>Второе имя:</h1>
+    <p><?php echo htmlspecialchars($names[1]['name']); ?></p>
 </div>
 
 </body>
-
-
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>
