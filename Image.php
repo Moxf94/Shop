@@ -1,79 +1,7 @@
-<?php
-// Подключение к базе данных
-$host = 'localhost';
-$db = 'Shop';
-$user = 'postgres';
-$pass = 'admin';
-
-
-// Подключение к PostgreSQL через PDO
-$dsn = "pgsql:host=$host;dbname=$db;";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    throw new PDOException($e->getMessage(), (int)$e->getCode());
-}
-
-//// Проверяем, передан ли параметр 'name' в URL
-//if (isset($_GET['name'])) {
-//    $name = $_GET['name'];
-//
-//    // Получение изображения по его ID
-//    $stmt = $pdo->prepare('SELECT id, data FROM images WHERE name = :name');
-//    $stmt->execute(['name' => $name]);
-//    $image = $stmt->fetch();
-//
-
-//    if ($image) {
-//        // Очищаем буфер вывода
-//        ob_clean();
-//
-//        // Преобразуем данные изображения
-//        $data = stream_get_contents($image['data']);
-//
-//        // Устанавливаем правильный заголовок
-//        header('Content-Type: image/png'); // Замените на нужный формат
-//
-//        // Выводим изображение
-//        echo $data;
-//        exit;
-//     else {
-//        echo 'Изображение не найдено';
-//    }
-
-function getImagesFromdb($pdo)
-{
-    $imageDataArray = [];
-    // Запрос для извлечения изображений
-    $query = "SELECT data FROM images";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return $images;
-}
-
-function getNamesFromDb($pdo) {
-    $stmt = $pdo->prepare("SELECT name, description FROM pc_components"); // Измените на вашу таблицу
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Возвращаем все найденные имена
-}
-$names= getNamesFromDb($pdo);
-$imageData = getImagesFromdb($pdo);
-?>
-<style>
-    .custom-img {
-        width: 150px;  /* Задайте нужную ширину */
-        height: 200px; /* Задайте нужную высоту */
-        object-fit: cover; /* Это свойство позволяет сохранить пропорции изображения */
-    }
-</style>
+<?php require_once 'ConnectDB.php';
+$db = new ConnectDB('localhost','shop', 'postgres', 'admin');
+$imageData = $db->fetchALL("SELECT data FROM images ORDER BY id");
+$names = $db->fetchALL("SELECT name, description FROM pc_components ORDER BY component_id")?>
 
 
 <!DOCTYPE html>
@@ -96,19 +24,22 @@ $imageData = getImagesFromdb($pdo);
 </div>
 
 <div class="container">
-    <?php for ($i = 0; $i < count($imageData); $i++) : ?>
+<!--    --><?php //for ($i = 0; $i < count($imageData); $i++) : ?>
+    <?php foreach ($imageData as $index => $image): ?>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-4">
-                <img src="<?php echo htmlspecialchars($imageData[$i]['data'])  ?>" class="card-img-top custom-img" alt="...">
+                <div class="image-container">
+                <img src="<?php echo htmlspecialchars($image['data'])  ?>" class="card-img-to img-fluid" alt="...">
+                    </div>
                 <div class="card-body">
-                   <h5 class="card-title"><?php echo htmlspecialchars($names[$i]['name']); ?> </h5>
-                   <p class="card-text"><?php echo htmlspecialchars($names[$i]['description']); ?></p>
+                   <h5 class="card-title"><?php echo htmlspecialchars($names[$index]['name']); ?> </h5>
+                   <p class="card-text"><?php echo htmlspecialchars($names[$index]['description']); ?></p>
                 </div>
             </div>
         </div>
     </div>
-    <?php endfor; ?>
+    <?php endforeach; ?>
 
 
 
