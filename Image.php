@@ -49,19 +49,16 @@ try {
 
 function getImagesFromdb($pdo)
 {
+    $imageDataArray = [];
     // Запрос для извлечения изображений
-    $query = "SELECT id, data FROM images";
+    $query = "SELECT data FROM images";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $imageData = [];
-        foreach ($images as $image) {
-            if(is_string([$image['data']])) {
-                $imageData[] = base64_encode($image['data']);
-            }
-        }
-    return $imageData;
+
+    return $images;
 }
+
 function getNamesFromDb($pdo) {
     $stmt = $pdo->prepare("SELECT name, description FROM pc_components"); // Измените на вашу таблицу
     $stmt->execute();
@@ -69,15 +66,16 @@ function getNamesFromDb($pdo) {
 }
 $names= getNamesFromDb($pdo);
 $imageData = getImagesFromdb($pdo);
-    foreach ($imageData as $data) {
-        if($data !== null){
-            ?>
-            <div class="col-md-3 mb-4"> <!-- Измените col-md-3 на нужный размер -->
-                        <div class="card">
-                            <img src="data:image/jpeg;base64,<?php echo $data; ?>" class="card-img-top" alt="Image">
-                        </div>
-                    </div>
-<?php }} ?>
+?>
+<style>
+    .custom-img {
+        width: 150px;  /* Задайте нужную ширину */
+        height: 200px; /* Задайте нужную высоту */
+        object-fit: cover; /* Это свойство позволяет сохранить пропорции изображения */
+    }
+</style>
+
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -98,19 +96,19 @@ $imageData = getImagesFromdb($pdo);
 </div>
 
 <div class="container">
-    <?php foreach ($names as $value): ?>
+    <?php for ($i = 0; $i < count($imageData); $i++) : ?>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-4">
-                <img src="" class="card-img-top" alt="...">
+                <img src="<?php echo htmlspecialchars($imageData[$i]['data'])  ?>" class="card-img-top custom-img" alt="...">
                 <div class="card-body">
-                   <h5 class="card-title"><?php echo htmlspecialchars($value['name']); ?> </h5>
-                   <p class="card-text"><?php echo htmlspecialchars($value['description']); ?></p>
+                   <h5 class="card-title"><?php echo htmlspecialchars($names[$i]['name']); ?> </h5>
+                   <p class="card-text"><?php echo htmlspecialchars($names[$i]['description']); ?></p>
                 </div>
             </div>
         </div>
     </div>
-    <?php endforeach; ?>
+    <?php endfor; ?>
 
 
 
