@@ -1,5 +1,6 @@
 <?php
 
+namespace Old;
 class ConnectDB
 {
 

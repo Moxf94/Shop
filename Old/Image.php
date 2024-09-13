@@ -1,4 +1,6 @@
-<?php require_once 'ConnectDB.php';
+<?php use Old\ConnectDB;
+
+require_once 'ConnectDB.php';
 $db = new ConnectDB('localhost','shop', 'postgres', 'admin');
 $imageData = $db->fetchALL("SELECT data FROM images ORDER BY id");
 $names = $db->fetchALL("SELECT name, description FROM pc_components ORDER BY component_id")?>
