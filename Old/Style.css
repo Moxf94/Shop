@@ -1,0 +1,31 @@
+body {
+    background-color: #f8f9fa; /* Серый фон */
+}
+.container {
+    background-color: white; /* Белый контейнер */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.filters-container {
+    background-color: #f8f9fa; /* Серый фон для контейнера с фильтрами */
+    padding: 20px;
+    border-radius: 5px;
+}
+.filters-box {
+    background-color: white; /* Белый контейнер внутри фильтров */
+    padding: 20px;
+    border-radius: 5px;
+}
+.result-container {
+    background-color: white; /* Белый контейнер для результата */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex; /* Используем flexbox для расположения изображения и текста */
+    align-items: center; /* Центрируем элементы по вертикали */
+}
+.result-image {
+    max-width: 150px; /* Максимальная ширина изображения */
+    margin-right: 20px; /* Отступ справа от изображения */
+}
