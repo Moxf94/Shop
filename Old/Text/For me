@@ -1,4 +1,4 @@
-pg_dumb -U postgres -f bd_Shop.sql Shop - сделать sql
+pg_dump -U postgres -f bd_Shop.sql Shop - сделать sql
 psql -U postgres -d Shop -f shop.sql - восстановить БД
 documentRoot - поиск в httpd.ini для apachi указать файл
 

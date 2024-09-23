@@ -26,7 +26,6 @@
             <?php if (isset($components)): ?>
                 <?php foreach ($components as $component): ?>
                     <?php
-                    // Найдем изображение по имени компонента
                     $imageData = null; // Инициализируем переменную для хранения данных изображения
                     if (isset($images)) {
                         foreach ($images as $image) {
@@ -56,7 +55,7 @@
             <?php endif; ?>
         </div>
 
-        <div class="col-md-3"> <!-- Переместили контейнер с фильтрами сюда -->
+        <div class="col-md-3">
             <!-- Контейнер с фильтрами -->
             <div class="filters-container mb-4">
                 <div class="filters-box">
@@ -83,8 +82,8 @@
             </div>
         </div>
 
-    </div> <!-- Закрываем row -->
-</div> <!-- Закрываем container -->
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
