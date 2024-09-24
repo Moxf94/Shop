@@ -20,9 +20,9 @@ $filters = getFilters($type, $conn);
     <form method="POST" action="">
         <div class="form-group">
             <label>Производитель</label>
-            <?php foreach ($filters['name'] as $manufacturer): ?>
+            <?php foreach ($filters['value'] as $manufacturer): ?>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="manufacturer[]" value="<?php echo $manufacturer; ?>" <?php if (isset($_POST['manufacturer']) && in_array($manufacturer, $_POST['manufacturer'])) echo 'checked'; ?>>
+                    <input class="form-check-input" type="checkbox" name="manufacturer[]" value="<?php echo $manufacturer; ?>" <?php if (isset($_POST['value']) && in_array($manufacturer, $_POST['value'])) echo 'checked'; ?>>
                     <label class="form-check-label"><?php echo $manufacturer; ?></label>
                 </div>
             <?php endforeach; ?>

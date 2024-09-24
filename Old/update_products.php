@@ -1,7 +1,7 @@
 <?php
 include 'db.php';
 
-$manufacturers = isset($_POST['manufacturer']) ? $_POST['manufacturer'] : [];
+$manufacturers = isset($_POST['value']) ? $_POST['value'] : [];
 
 $sql = "SELECT * FROM products WHERE type = 'Видеокарта'";
 if (!empty($manufacturers)) {
