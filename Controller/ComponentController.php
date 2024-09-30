@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace Controllers;
+namespace Controller;
 
-use Models\Components;
+use Model\Components;
 
 class ComponentController
 {
@@ -14,12 +14,12 @@ class ComponentController
         // Проверяем, есть ли запрос на поиск
         if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
             $searchTerm = trim($_GET['search']);
-            $components = $model->searchComponents($searchTerm); // Используем метод поиска
+            $products = $model->searchComponents($searchTerm); // Используем метод поиска
+            $properties = $model->getProperties($searchTerm);
         } else {
-            $components = $model->getAllComponents(); // Получаем все компоненты
+            $products = $model->getAllComponents(); // Получаем все компоненты
         }
         $images = $model->getImages();
-
-        include __DIR__ . '/../views/index.php';
+        include __DIR__ . '/../view/index.php';
     }
 }

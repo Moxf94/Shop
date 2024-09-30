@@ -7,17 +7,17 @@ use PDO;
 use PDOException;
 
 class Database {
-    private $host = 'localhost';
-    private $db = 'shop';
-    private $user = 'postgres';
-    private $pass = 'admin';
-    private $connection;
+    private string $host = 'localhost';
+    private string $db = 'shop';
+    private string $user = 'postgres';
+    private string $pass = 'admin';
 
-    public function connect() {
+    public function connect(): ?PDO
+    {
         try {
-            $this->connection = new PDO("pgsql:host={$this->host};dbname={$this->db}", $this->user, $this->pass);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $this->connection;
+            $connection = new PDO("pgsql:host={$this->host};dbname={$this->db}", $this->user, $this->pass);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $connection;
         } catch (PDOException $e) {
             echo "Ошибка подключения: " . $e->getMessage();
             return null;
