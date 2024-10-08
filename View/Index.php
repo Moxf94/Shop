@@ -26,6 +26,7 @@
             <div id="searchResults">
                 <?php if (isset($pagination)): ?>
                     <?php foreach ($pagination as $product): ?>
+                    <?php var_dump($product) ?>
                         <?php
                         // Найдем изображение по имени компонента
                         $imageData = null; // Инициализируем переменную для хранения данных изображения
@@ -93,8 +94,11 @@
             <div class="filters-box bg-white p-3 border">
                 <h5>Фильтры</h5>
                 <form method="GET" action="">
-                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search']); ?>">
-                    <?php ?>
+                    <!-- Передача текущего поискового запроса -->
+                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+
+                    <!-- Проверка наличия уникальных свойств -->
+                    <?php if (!empty($unique_properties)): ?>
                         <?php foreach ($unique_properties as $group => $values): ?>
                             <h6><?php echo htmlspecialchars($group); ?></h6>
                             <?php foreach ($values as $index => $value): ?>
@@ -107,11 +111,15 @@
                                 </div>
                             <?php endforeach; ?>
                         <?php endforeach; ?>
-                    <?php ?>
+                    <?php else: ?>
+                        <p>Нет доступных фильтров.</p>
+                    <?php endif; ?>
+                    <?php endif; ?>
+                    <!-- Кнопка для применения фильтров -->
                     <button type="submit" class="btn btn-primary">Применить фильтры</button>
                 </form>
-                <?php endif; ?>
             </div>
+
         </div>
     </div>
 </div>

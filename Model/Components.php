@@ -56,28 +56,35 @@ WHERE pt.name = p.type
 
     public function filterComponents(array $filters, string $productType): false|array
     {
-        $query = 'SELECT DISTINCT p.* 
-              FROM products p
-              JOIN product_properties pp ON p.id = pp.product_id
-              WHERE p.type = :productType';
-        $params = [':productType' => $productType];
+        $query = 'SELECT DISTINCT p.*
+                 FROM products p
+                  JOIN product_properties pp ON p.id = pp.product_id
+                  WHERE p.type = :productType';
+        $params = [':productType' => $productType]; // Параметры для запроса
 
+        // Добавляем фильтры
         if (!empty($filters)) {
-            foreach ($filters as $index => $filter) {
+            foreach ($filters as $filter) {
                 $query .= " AND EXISTS (
-                        SELECT 1
-                        FROM product_properties pp$index
-                        WHERE pp$index.product_id = p.id
-                          AND pp$index.value ILIKE :filter$index
-                    )";
-                $params[":filter$index"] = '%' . $filter . '%';
+                            SELECT 1
+                            FROM product_properties pp
+                            WHERE pp.product_id = p.id
+                              AND pp.value ILIKE :filter
+                        )";
+                $params[":filter"] = '%' . $filter . '%'; // Добавляем фильтры в параметры
             }
         }
-
-
+        echo "SQL-запрос: $query <br>";
+        echo "Параметры: <pre>" . print_r($params, true) . "</pre>";
+        // Подготовка запроса
         $stmt = $this->db->prepare($query);
         $stmt->execute($params);
-        return $stmt->fetchAll();
+
+        $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>";
+        print_r($result);
+        echo "</pre>";
+        return $result;
             }
 
 
