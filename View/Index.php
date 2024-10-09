@@ -26,7 +26,6 @@
             <div id="searchResults">
                 <?php if (isset($pagination)): ?>
                     <?php foreach ($pagination as $product): ?>
-                    <?php var_dump($product) ?>
                         <?php
                         // Найдем изображение по имени компонента
                         $imageData = null; // Инициализируем переменную для хранения данных изображения
@@ -91,11 +90,12 @@
         <?php if (isset($_GET['search']) && !empty(trim($_GET['search'])) && isset($unique_properties)): ?>
         <div class="col-md-3">
             <!-- Контейнер с фильтрами -->
+            <form method="GET" action="" id="filterForm">
             <div class="filters-box bg-white p-3 border">
                 <h5>Фильтры</h5>
                 <form method="GET" action="">
                     <!-- Передача текущего поискового запроса -->
-                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>">
+                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search']); ?>">
 
                     <!-- Проверка наличия уникальных свойств -->
                     <?php if (!empty($unique_properties)): ?>
@@ -114,10 +114,13 @@
                     <?php else: ?>
                         <p>Нет доступных фильтров.</p>
                     <?php endif; ?>
+                    <button type="submit" class="btn btn-primary btn-sm">Применить фильтры</button>
                     <?php endif; ?>
-                    <!-- Кнопка для применения фильтров -->
-                    <button type="submit" class="btn btn-primary">Применить фильтры</button>
                 </form>
+                    <!-- Кнопка для применения фильтров -->
+
+                </form>
+
             </div>
 
         </div>
@@ -131,12 +134,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+        const filterForm = document.getElementById('filterForm'); // Получаем форму фильтров
 
         filterCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const group = this.getAttribute('data-group');
                 const otherCheckboxes = document.querySelectorAll(`.filter-checkbox[data-group="${group}"]`);
 
+                // Отключение других чекбоксов в группе
                 if (this.checked) {
                     otherCheckboxes.forEach(otherCheckbox => {
                         if (otherCheckbox !== this) {
@@ -148,6 +153,9 @@
                         otherCheckbox.disabled = false;
                     });
                 }
+
+                // Отправляем форму
+                filterForm.submit(); // Отправляем форму при изменении состояния чекбокса
             });
         });
     });

@@ -13,24 +13,6 @@ class Components{
         $this->db = (new Database())->connect();
     }
 
-    public function getAllComponents(): false|array
-    {
-        $query = ("SELECT * FROM products ORDER BY id");
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    public function searchComponents($searchTerm): false|array
-    {
-        $query = "SELECT * FROM products WHERE name ILIKE :searchTerm
-                        OR type ILIKE :searchTerm"; // Используем ILIKE для нечувствительного поиска
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', \PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchAll(); // Возвращает массив найденных записей
-    }
-
     public function getImages(): false|array{
         $query = ("SELECT * FROM images ORDER BY product_id ");
         $stmt = $this->db->prepare($query);
@@ -74,20 +56,14 @@ WHERE pt.name = p.type
                 $params[":filter"] = '%' . $filter . '%'; // Добавляем фильтры в параметры
             }
         }
-        echo "SQL-запрос: $query <br>";
-        echo "Параметры: <pre>" . print_r($params, true) . "</pre>";
+
         // Подготовка запроса
         $stmt = $this->db->prepare($query);
         $stmt->execute($params);
 
         $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo "<pre>";
-        print_r($result);
-        echo "</pre>";
         return $result;
             }
-
-
 
     public function getPropertiesDetails($productId): false|array
     {
@@ -136,41 +112,5 @@ WHERE pp.product_id = :productId ORDER BY pp.property_id");
         $stmt->execute();
         return (int)$stmt->fetchColumn();
     }
-
-//    public function getTotalProductsCount(string $searchTerm = '', array $filters = [], ?string $productType = null): int
-//    {
-//        $query = 'SELECT COUNT(DISTINCT p.id)
-//              FROM products p
-//              JOIN product_properties pp ON p.id = pp.product_id
-//              WHERE 1=1';
-//
-//        $params = [];
-//
-//        if (!empty($searchTerm)) {
-//            $query .= ' AND p.name ILIKE :searchTerm';
-//            $params[':searchTerm'] = '%' . $searchTerm . '%';
-//        }
-//
-//        if ($productType) {
-//            $query .= ' AND p.type = :productType';
-//            $params[':productType'] = $productType;
-//        }
-//
-//        if (!empty($filters)) {
-//            foreach ($filters as $index => $filter) {
-//                $query .= " AND EXISTS (
-//                        SELECT 1
-//                        FROM product_properties pp$index
-//                        WHERE pp$index.product_id = p.id
-//                          AND pp$index.value ILIKE :filter$index
-//                    )";
-//                $params[":filter$index"] = '%' . $filter . '%';
-//            }
-//        }
-//
-//        $stmt = $this->db->prepare($query);
-//        $stmt->execute($params);
-//        return (int) $stmt->fetchColumn();
-//    }
 
 }
