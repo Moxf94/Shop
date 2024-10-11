@@ -9,10 +9,6 @@ class ComponentController
 {
     public function index(): void
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-
         $model = new Components();
         $searchTerm = $_GET['search'] ?? '';
         $limit = 5; // Количество продуктов на странице
@@ -42,7 +38,7 @@ class ComponentController
         include __DIR__ . '/../View/index.php';
     }
 
-    protected function getProducts(Components $model, string $searchTerm, int $offset, int $limit): array
+    public function getProducts(Components $model, string $searchTerm, int $offset, int $limit): array
     {
         $productType = $_GET['search'] ?? '';
         $selected_filters = $_GET['filters'] ?? [];

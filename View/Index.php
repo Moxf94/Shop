@@ -114,7 +114,6 @@
                     <?php else: ?>
                         <p>Нет доступных фильтров.</p>
                     <?php endif; ?>
-                    <button type="submit" class="btn btn-primary btn-sm">Применить фильтры</button>
                     <?php endif; ?>
                 </form>
                     <!-- Кнопка для применения фильтров -->
@@ -131,6 +130,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const filterCheckboxes = document.querySelectorAll('.filter-checkbox');

@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .  # Контекст сборки (корневая директория проекта)
+      dockerfile: Dockerfile  # Укажите имя вашего Dockerfile
+    volumes:
+      - ./Public:/var/www/html  # Подключение папки Public к контейнеру
+      - ./Config:/var/www/html/Config  # Подключение папки Config
+      - ./Controller:/var/www/html/Controller  # Подключение папки Controller
+      - ./Model:/var/www/html/Model  # Подключение папки Model
+      - ./View:/var/www/html/View  # Подключение папки View
+      - ./vendor:/var/www/html/vendor  # Подключение папки vendor
+    ports:
+      - "80:80"  # Проброс порта 80 для доступа к приложению
+    depends_on:
+      - db  # Указывает, что сервис app зависит от сервиса db
+
+  db:
+    image: postgres:latest  # Использование последнего образа PostgreSQL
+    environment:
+      POSTGRES_DB: shop  # Имя вашей базы данных
+      POSTGRES_USER: postgres  # Имя пользователя базы данных
+      POSTGRES_PASSWORD: admin  # Пароль для пользователя
+    ports:
+      - "5432:5432"  # Проброс порта 5432 для доступа к базе данных
+
+networks:
+  default:
+    driver: bridge  # Использование сетевого драйвера по умолчанию

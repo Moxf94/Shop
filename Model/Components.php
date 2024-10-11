@@ -7,7 +7,7 @@ use Config\Database;
 use PDO;
 
 class Components{
-    private $db;
+    protected PDO $db;
 
     public function __construct(){
         $this->db = (new Database())->connect();
@@ -31,7 +31,7 @@ FROM properties pr
 WHERE pt.name = p.type
   AND p.type ILIKE :searchTerm OR p.name ILIKE :searchTerm");
         $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', \PDO::PARAM_STR);
+        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%');
         $stmt->execute();
         return $stmt->fetchAll();
     }
@@ -61,8 +61,7 @@ WHERE pt.name = p.type
         $stmt = $this->db->prepare($query);
         $stmt->execute($params);
 
-        $result =  $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
 
     public function getPropertiesDetails($productId): false|array
@@ -72,7 +71,7 @@ FROM product_properties pp
          JOIN properties pr ON pp.property_id = pr.id
 WHERE pp.product_id = :productId ORDER BY pp.property_id");
         $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':productId', $productId, \PDO::PARAM_INT);
+        $stmt->bindValue(':productId', $productId, PDO::PARAM_INT);
         $stmt->execute([$productId]);
 
         return  $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -89,7 +88,7 @@ WHERE pp.product_id = :productId ORDER BY pp.property_id");
 
         $stmt = $this->db->prepare($query);
         if ($searchTerm) {
-            $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%');
         }
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -107,7 +106,7 @@ WHERE pp.product_id = :productId ORDER BY pp.property_id");
         }
         $stmt = $this->db->prepare($query);
         if ($searchTerm) {
-            $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%');
         }
         $stmt->execute();
         return (int)$stmt->fetchColumn();

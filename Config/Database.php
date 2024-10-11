@@ -7,7 +7,7 @@ use PDO;
 use PDOException;
 
 class Database {
-    private string $host = 'localhost';
+    private string $host = 'db';
     private string $db = 'shop';
     private string $user = 'postgres';
     private string $pass = 'admin';
