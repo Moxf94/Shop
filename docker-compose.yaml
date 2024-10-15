@@ -9,7 +9,6 @@ services:
       - ./Controller:/var/www/html/Controller  # Подключение папки Controller
       - ./Model:/var/www/html/Model  # Подключение папки Model
       - ./View:/var/www/html/View  # Подключение папки View
-      - ./vendor:/var/www/html/vendor  # Подключение папки vendor
       - ./Tests:/var/www/html/Tests
     ports:
       - "80:80"  # Проброс порта 80 для доступа к приложению
