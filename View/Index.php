@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Поисковик</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../Public/Style.css">
+    <link rel="stylesheet" href="Style.css">
 </head>
 <body>
 
@@ -71,15 +71,15 @@
                         </li>
                     <?php endif; ?>
 
-                    <?php if (isset($total_pages)): ?>
-                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <?php if (isset($totalPages)): ?>
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                             <li class="page-item <?php echo (isset($page) && $i === $page) ? 'active' : ''; ?>">
                                 <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                             </li>
                         <?php endfor; ?>
                     <?php endif; ?>
 
-                    <?php if (isset($page) && isset($total_pages) && $page < $total_pages): ?>
+                    <?php if (isset($page) && isset($totalPages) && $page < $totalPages): ?>
                         <li class="page-item">
                             <a class="page-link" href="?page=<?php echo $page + 1; ?>">Вперед</a>
                         </li>
@@ -87,24 +87,23 @@
                 </ul>
             </nav>
         </div>
-        <?php if (isset($_GET['search']) && !empty(trim($_GET['search'])) && isset($unique_properties)): ?>
+        <?php if (isset($_GET['search']) && !empty(trim($_GET['search'])) && isset($uniqueProperties)): ?>
         <div class="col-md-3">
             <!-- Контейнер с фильтрами -->
             <form method="GET" action="" id="filterForm">
             <div class="filters-box bg-white p-3 border">
                 <h5>Фильтры</h5>
                 <form method="GET" action="">
-                    <!-- Передача текущего поискового запроса -->
                     <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search']); ?>">
 
                     <!-- Проверка наличия уникальных свойств -->
-                    <?php if (!empty($unique_properties)): ?>
-                        <?php foreach ($unique_properties as $group => $values): ?>
+                    <?php if (!empty($uniqueProperties)): ?>
+                        <?php foreach ($uniqueProperties as $group => $values): ?>
                             <h6><?php echo htmlspecialchars($group); ?></h6>
                             <?php foreach ($values as $index => $value): ?>
                                 <div class="form-check">
                                     <input class="form-check-input filter-checkbox" type="checkbox" name="filters[]" value="<?php echo htmlspecialchars($value); ?>" id="filter_<?php echo $group; ?>_<?php echo $index; ?>" data-group="<?php echo htmlspecialchars($group); ?>"
-                                        <?php echo (isset($selected_filters) && in_array($value, $selected_filters)) ? 'checked' : ''; ?>>
+                                        <?php echo (isset($selectedFilters) && in_array($value, $selectedFilters)) ? 'checked' : ''; ?>>
                                     <label class="form-check-label" for="filter_<?php echo $group; ?>_<?php echo $index; ?>">
                                         <?php echo htmlspecialchars($value); ?>
                                     </label>
@@ -116,8 +115,6 @@
                     <?php endif; ?>
                     <?php endif; ?>
                 </form>
-                    <!-- Кнопка для применения фильтров -->
-
                 </form>
 
             </div>

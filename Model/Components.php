@@ -57,7 +57,6 @@ WHERE pt.name = p.type
             }
         }
 
-        // Подготовка запроса
         $stmt = $this->db->prepare($query);
         $stmt->execute($params);
 

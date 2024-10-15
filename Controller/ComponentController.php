@@ -16,21 +16,21 @@ class ComponentController
         $offset = ($page - 1) * $limit;
 
 
-        // Получение продуктов с учетом поиска
+        // Получение товаров с учетом поиска
         $pagination = $this->getProducts($model, $searchTerm, $offset, $limit);
 
-        // Получаем общее количество продуктов
-        $count_pagination = $model->getTotalCount();
-        $total_pages = ceil($count_pagination / $limit);
+        // Получаем общее количество товаров
+        $countPagination = $model->getTotalCount();
+        $totalPages = ceil($countPagination / $limit);
 
         // Получаем уникальные свойства для фильтрации
-        $unique_properties = $this->getUniqueProperties($pagination, $model);
+        $uniqueProperties = $this->getUniqueProperties($pagination, $model);
 
 
         // Получаем изображения продуктов
         $images = $model->getImages();
 
-        // Получаем детали для каждого продукта
+        // Получаем детали для каждого товара
         foreach ($pagination as $key => $product) {
             $pagination[$key]['properties'] = $model->getPropertiesDetails($product['id']);
         }
@@ -41,18 +41,17 @@ class ComponentController
     public function getProducts(Components $model, string $searchTerm, int $offset, int $limit): array
     {
         $productType = $_GET['search'] ?? '';
-        $selected_filters = $_GET['filters'] ?? [];
+        $selectedFilters = $_GET['filters'] ?? [];
 
-        if (!empty($selected_filters)) {
+        if (!empty($selectedFilters)) {
             // Вызов метода фильтрации с переданными фильтрами и типом продукта
-            return $model->filterComponents($selected_filters, $productType);
+            return $model->filterComponents($selectedFilters, $productType);
         }
         // Если searchTerm пуст, получаем все компоненты
         return $model->getComponentsPagination($offset, $limit, $searchTerm);
     }
 
-    public
-    function getUniqueProperties(array $products, Components $model): array
+    public function getUniqueProperties(array $products, Components $model): array
     {
         $properties = [];
         foreach ($products as $product) {
@@ -63,10 +62,10 @@ class ComponentController
         }
 
         // Уникальные свойства
-        $unique_properties = [];
+        $uniqueProperties = [];
         foreach ($properties as $group => $values) {
-            $unique_properties[$group] = array_unique($values);
+            $uniqueProperties[$group] = array_unique($values);
         }
-        return $unique_properties;
+        return $uniqueProperties;
     }
 }

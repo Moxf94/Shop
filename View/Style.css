@@ -24,8 +24,18 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: flex; /* Используем flexbox для расположения изображения и текста */
     align-items: center; /* Центрируем элементы по вертикали */
+    margin-bottom: 0.05rem;
 }
 .result-image {
-    max-width: 150px; /* Максимальная ширина изображения */
+    max-width: 250px; /* Максимальная ширина изображения */
     margin-right: 20px; /* Отступ справа от изображения */
+}
+.result-image-container {
+    margin-right: 20px; /* Отступ справа от контейнера с изображением */
+}
+.product-details .card-text{
+    margin-bottom: 0.05rem;
+}
+.result-container{
+    margin-bottom: 1rem;
 }
